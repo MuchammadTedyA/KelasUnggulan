@@ -1,0 +1,132 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container m-3 p-3">
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center align-middle">
+                            NISN
+                        </th>
+                        <th class="text-center align-middle">
+                            Nama Siswa
+                        </th>
+                        
+                        
+                        <th class="text-center align-middle">
+                            Hasil
+                        </th>
+                            
+                        
+                    </tr>
+                    
+                </thead>
+                <tbody>
+                    
+                    {% for i in page_obj %}
+                    <tr>
+                        <td class="text-center">
+                            {{i.siswa_id}}
+                        </td>
+                        
+                        {% for j in siswaD %}
+                            
+                            {% if j.nisn_siswa == i.siswa_id %}
+                            <td>
+                                {{j.nama_siswa}}
+                            </td>
+                            {% endif %}
+                                
+                        {% endfor %}
+                            
+                        
+
+                        
+                        
+                        <td style="color: green;">
+                            <b>
+                                {{i.sum|floatformat:5}}
+                            </b>
+                        </td>
+                            
+                            
+                            
+                    </tr>
+                        
+                    {% endfor %}
+                        
+                </tbody>
+            </table>
+
+            {% if page_obj.has_other_pages %}
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page=1">first</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+          {% else %}
+            <li class="page-item disabled"><span class="page-link">first</span></li>
+            <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+          {% endif %}
+          {% for i in page_obj.paginator.page_range %}
+            {% if page_obj.number == i %}
+              <li class="page-item active"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+            {% else %}
+              <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+          {% endfor %}
+          {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">last</a></li>
+          {% else %}
+            <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+            <li class="page-item disabled"><span class="page-link">last</span></li>
+          {% endif %}
+        </ul>
+      </nav>
+      {% endif %}
+      
+            <div class="text-center">
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal" title="Simpan"><i class="fa-solid fa-save"></i> Simpan</button>
+            </div>
+            
+            <!-- Modal Tambah Sub -->
+				<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h1 class="modal-title fs-5" id="exampleModalLabel">Simpan Hasil</h1>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<form action="/fahp/hasil/simpan" method="POST">
+								{% csrf_token %}
+								<div class="modal-body">
+										<div class="row">
+											<label class="form-label">ID Hasil</label>
+											<div class="col-md">
+												<input type="text" class="form-control" value="{{kodes}}" disabled/>
+												<input type="hidden" class="form-control" id="kode" name="kode" value="{{ kodes }}"/>
+											</div>
+										</div>
+										<div class="row">
+											<label for="inputEmail4" class="form-label">Nama</label>
+											<div class="col-md">
+												<input type="text" class="form-control" id="nama" name="nama"/>
+											</div>
+										</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+									<input type="submit" name="submit" class="btn btn-primary" value="Simpan">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			<!-- End Modal Tambah Sub -->
+        </div>
+    </div>
+</div>
+
+{%endblock content %}

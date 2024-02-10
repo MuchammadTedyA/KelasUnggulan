@@ -1,0 +1,60 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container m-3">
+    <div class="card p-3">
+        <form action="" method="POST">
+            {% for d1 in data %}
+        
+                {% for d2 in data %}
+                    {%if d1.id_kriteria != d2.id_kriteria%}
+                    
+                    <div class="row">
+                        <div class="col-md-1 text-center align-middle">
+                            <b>{{d1.id_kriteria}}|{{d1.nama_kriteria}}</b>
+        
+                        </div>
+                        <div class="col-md-5">
+                            <select class="form-select mb-3" aria-label=".form-select-lg example">
+                                <option selected disabled>Open this select menu</option>
+                                <option value="1">Sama Penting</option>
+                                <option value="2">Sedikit Lebih Penting (Tengah)</option>
+                                <option value="3">Sedikit Lebih Penting</option>
+                                <option value="4">Lebih Penting (Tengah)</option>
+                                <option value="5">Lebih Penting</option>
+                                <option value="6">Lebih Sangat Penting (Tengah)</option>
+                                <option value="7">Lebih Sangat Penting</option>
+                                <option value="8">Lebih Penting Mutlak (Tengah)</option>
+                                <option value="9">Lebih Penting Mutlak</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1 text-center align-middle">
+                            {{d2.id_kriteria}}|{{d2.nama_kriteria}}
+                        </div>
+                    </div>
+                    {%else%}
+                    <div class="row visually-hidden">
+                        <div class="col-md-1 text-center align-middle">
+                            <b>{{d1.id_kriteria}}|{{d1.nama_kriteria}}</b>
+        
+                        </div>
+                        <div class="col-md-5">
+                            <select class="form-select mb-3" aria-label=".form-select-lg example">
+                                <option value="1" selected>Sama Penting</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1 text-center align-middle">
+                            <b>{{d2.id_kriteria}}|{{d2.nama_kriteria}}</b>
+                           
+                        </div>
+                    </div>
+                    {%endif%}
+                {%endfor%}
+            {%endfor%}
+        </form>
+        
+    </div>
+    
+    
+</div>
+
+{% endblock content %}

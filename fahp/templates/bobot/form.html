@@ -1,0 +1,136 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container m-3 p-3">
+    <div class="card p-3 m-3">
+        {% if datab%}
+        <form action="" method="POST">
+            {% csrf_token %}    
+            <div class="row p-3 ">
+                <div class="col">
+                </div>
+                {% for d1 in data %}
+                <div class="col text-center"><b>{{d1.nama_kriteria}}</b></div>
+                {%endfor%}
+            </div>
+            {% for d1 in data %}
+            <div class="row p-2">
+                <div class="col"><b>{{d1.nama_kriteria}}</b></div>
+                {% for d2 in data %}
+                    {%if d1.id_kriteria != d2.id_kriteria%}
+                        {% for bobot in datab %}
+                            {%if bobot.kriteria2 == d2.id_kriteria and bobot.kriteria1_id == d1.id_kriteria %}
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col">
+                                            <input class="form-control" type="hidden" id="k1{{d1.id_kriteria}}{{d2.id_kriteria}}" name="k1{{d1.id_kriteria}}{{d2.id_kriteria}}" value="{{d1.id_kriteria}}">
+                                            <input class="form-control" type="text" id="nk1{{d1.id_kriteria}}{{d2.id_kriteria}}" name="nk1{{d1.id_kriteria}}{{d2.id_kriteria}}" value="{{bobot.bobotk1}}">
+                                        </div>
+                                        /
+                                        <div class="col">
+                                            <input class="form-control" type="hidden" id="k2{{d1.id_kriteria}}{{d2.id_kriteria}}" name="k2{{d1.id_kriteria}}{{d2.id_kriteria}}" value="{{d2.id_kriteria}}">
+                                            <input class="form-control" type="text" id="nk2{{d1.id_kriteria}}{{d2.id_kriteria}}" name="nk2{{d1.id_kriteria}}{{d2.id_kriteria}}" value="{{bobot.bobotk2}}">
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            {%endif%}
+                        {%endfor%}
+                    
+                    {%else%}
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <input class="form-control" type="hidden" id="k1{{d1.id_kriteria}}{{d2.id_kriteria}}" name="k1{{d1.id_kriteria}}{{d2.id_kriteria}}" value="{{d1.id_kriteria}}">
+                                <input class="form-control" type="text" value="1" disabled>
+                            </div>
+                            /
+                            <div class="col">
+                                <input class="form-control" type="hidden" id="k2{{d1.id_kriteria}}{{d2.id_kriteria}}" name="k2{{d1.id_kriteria}}{{d2.id_kriteria}}" value="{{d2.id_kriteria}}">
+                                <input class="form-control" type="text" value="1" disabled>
+                            </div>
+                            <input type="hidden" id="nk1{{d1.id_kriteria}}{{d2.id_kriteria}}" name="nk1{{d1.id_kriteria}}{{d2.id_kriteria}}" value="1"> 
+                            <input type="hidden" id="nk2{{d1.id_kriteria}}{{d2.id_kriteria}}" name="nk2{{d1.id_kriteria}}{{d2.id_kriteria}}" value="1">
+                        </div>
+                    </div>
+                    {%endif%}
+                
+                {%endfor%}
+            </div>
+            {%endfor%}
+            <div class="col text-center m-3">
+                <input class="btn btn-primary" type="submit" value="Simpan">
+                <a class="btn btn-secondary" href="/fahp/kriteria/bersih">Bersih</a>
+            </div>
+            
+        </form>
+        {%else%}
+        <form action="" method="POST">
+            {% csrf_token %}    
+            <div class="row p-3 ">
+                <div class="col">
+                </div>
+                {% for d1 in data %}
+                <div class="col text-center"><b>{{d1.nama_kriteria}}</b></div>
+                {%endfor%}
+            </div>
+            
+            {% for d1 in data %}
+            <div class="row p-2">
+                <div class="col"><b>{{d1.nama_kriteria}}</b></div>
+                {% for d2 in data %}
+                    {%if d1.id_kriteria != d2.id_kriteria%}
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <input class="form-control" type="hidden" id="k1{{d1.id_kriteria}}{{d2.id_kriteria}}" name="k1{{d1.id_kriteria}}{{d2.id_kriteria}}" value="{{d1.id_kriteria}}">
+                                <input class="form-control" type="text" id="nk1{{d1.id_kriteria}}{{d2.id_kriteria}}" name="nk1{{d1.id_kriteria}}{{d2.id_kriteria}}" value="">
+                            </div>
+                            /
+                            <div class="col">
+                                <input class="form-control" type="hidden" id="k2{{d1.id_kriteria}}{{d2.id_kriteria}}" name="k2{{d1.id_kriteria}}{{d2.id_kriteria}}" value="{{d2.id_kriteria}}">
+                                <input class="form-control" type="text" id="nk2{{d1.id_kriteria}}{{d2.id_kriteria}}" name="nk2{{d1.id_kriteria}}{{d2.id_kriteria}}" value="">
+                            </div>
+                        </div>
+                    </div>
+                    {%else%}
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <input class="form-control" type="hidden" id="k1{{d1.id_kriteria}}{{d2.id_kriteria}}" name="k1{{d1.id_kriteria}}{{d2.id_kriteria}}" value="{{d1.id_kriteria}}">
+                                <input class="form-control" type="text" value="1" disabled>
+                            </div>
+                            /
+                            <div class="col">
+                                <input class="form-control" type="hidden" id="k2{{d1.id_kriteria}}{{d2.id_kriteria}}" name="k2{{d1.id_kriteria}}{{d2.id_kriteria}}" value="{{d2.id_kriteria}}">
+                                <input class="form-control" type="text" value="1" disabled>
+                            </div>
+                            <input type="hidden" id="nk1{{d1.id_kriteria}}{{d2.id_kriteria}}" name="nk1{{d1.id_kriteria}}{{d2.id_kriteria}}" value="1"> 
+                            <input type="hidden" id="nk2{{d1.id_kriteria}}{{d2.id_kriteria}}" name="nk2{{d1.id_kriteria}}{{d2.id_kriteria}}" value="1">
+                        </div>
+                    </div>
+                    {%endif%}
+                
+                {%endfor%}
+            </div>
+            {%endfor%}
+            <div class="col text-center m-3">
+                <input class="btn btn-primary" type="submit" value="Simpan">
+            </div>
+            
+        </form>
+        {%endif%}
+        
+        
+    </div>
+
+    <div class="card p-3 m-3">
+        <div class="card-body">
+            {% block detail %} {% endblock detail %}
+        </div>
+        
+    </div>
+    
+    
+</div>
+
+{% endblock content %}

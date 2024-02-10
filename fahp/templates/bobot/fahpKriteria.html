@@ -1,0 +1,222 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container m-3 p-3">
+    <div class="card m-3 p-3">
+        <div class="card-body">
+            <div class="container">
+                <h2>Fuzzifikasi</h2>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th rowspan="2"></th>
+                            {% for d1 in kfahp %}
+                            <th colspan="3">
+                                <div class="text-center"><b>{{d1.nama_kriteria}}</b></div>
+                            </th>   
+                            
+                            {%endfor%}
+                        </tr>
+                        <tr>
+
+                        
+                        {% for d1 in kfahp %}
+                        
+                            <th class="text-center">
+                                l
+                            </th>   
+                            <th  class="text-center">
+                                m
+                            </th>  
+                            <th class="text-center">
+                                u
+                            </th>  
+                        
+                        {%endfor%}
+                    </tr>
+
+                    </thead>
+                    <tbody>
+                        {% for d1 in kfahp %}
+                        <tr>
+                            <td>
+                                <div><b>{{d1.nama_kriteria}}</b></div>
+                            </td>
+                                {% for d2 in kfahp %}
+                                        {% for bobot in bfahp %}
+                                            {%if bobot.kriteria2 == d2.id_kriteria and bobot.kriteria1_id == d1.id_kriteria %}
+                                                <td class="text-center">
+                                                    {{bobot.bobotk1.l|floatformat:0}}/{{bobot.bobotk2.l|floatformat:0}}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{bobot.bobotk1.m|floatformat:0}} /{{bobot.bobotk2.m|floatformat:0}}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{bobot.bobotk1.u|floatformat:0}}/{{bobot.bobotk2.u|floatformat:0}}
+                                                </td>
+                                            {%endif%}
+                                        {%endfor%}
+                                    
+                                {%endfor%}
+                            
+                        </tr>
+                        {%endfor%}
+                        <!-- <tr>
+                            <td>
+                                <b>Jumlah</b>
+                            </td>
+                            {%for jumlah in sum%}
+                            <th class="text-center">
+                                {{jumlah.bobot_normal}}
+                            </th>
+                            {%endfor%}
+                        </tr> -->
+                    </tbody>
+                </table>
+            </div>
+            
+            
+            <!-- Hasil hitung tabel kosistensi -->
+            <br>
+            <div class="container">
+                <h2 class="">Menjumlahkan <i>Fuzzy Synthetic Extent</i> (<i>Si</i>)</h2>
+                <table class="table table-bordered" style="margin: 0 auto;">
+                    <tr class="text-center">
+                        <th rowspan="2">Kriteria</th>
+                        <th colspan="3">Jumlah <i>l, m, u</i></th>
+                        <th colspan="3"><i>Fuzzy Synthetic Extent</i> (<i>Si</i>)</th>
+                    </tr>
+                    <tr class="text-center">
+                        <th>l</th>
+                        <th>m</th>
+                        <th>u</th>
+                        <th>l</th>
+                        <th>m</th>
+                        <th>u</th>
+                    </tr>
+                    {%for sum in sum_fahp%}
+                        <tr class="">
+                            <td class="text-center">
+                                <b>{{sum.kriteria.nama_kriteria}}</b>
+                            </td>
+                            <td class="text-center">
+                                {{sum.jumlah_l|floatformat:5}}
+                            </td>
+                            <td class="text-center">
+                                {{sum.jumlah_m|floatformat:5}}
+                            </td>
+                            <td class="text-center">
+                                {{sum.jumlah_u|floatformat:5}}
+                            </td>
+                            <td class="text-center">
+                                {{sum.si_l|floatformat:5}}
+                            </td>
+                            <td class="text-center">
+                                {{sum.si_m|floatformat:5}}
+                            </td>
+                            <td class="text-center">
+                                {{sum.si_u|floatformat:5}}
+                            </td>
+                        </tr>
+                    {%endfor%}
+                        
+                </table>                   
+                    
+                
+            </div>
+
+            <!-- Menghitung Derajat Probabilitas -->
+            <br>
+            <div class="container">
+                <h2>Menghitung Derajat Probabilitas (V)</h2>
+                <table class="table table-striped w-50" style="margin: auto;">
+                    
+                    {% for prob in  probabilitas %}
+                    <tr>
+                        <td>
+                            <b>
+                                {{prob.kriteria1}} &ge; {{prob.kriteria2}}
+                            </b>
+                        </td>
+                        <td>
+                            {{prob.nilai|floatformat:3}}
+                        </td>
+                        
+                            
+                    </tr>
+                        
+                    {% endfor %}
+                        
+                </table>
+            </div>
+
+            <br>
+            
+            <div class="container" style="margin-bottom: 10px;">
+                <h3 class="text-center">Diambil Nilai Terkecil</h3>
+                <br>
+                <table class="table table-striped w-25" style="margin: auto;">
+                    
+                    {% for min in  min %}
+                    <tr>
+                        <td>
+                            <b>
+                                {{min.kriteria1}}
+                            </b>
+                        </td>
+                        <td>
+                            {{min.min|floatformat:3}}
+                        </td> 
+                    </tr>
+                        
+                    {% endfor %}
+                        
+                </table>
+            </div>
+
+            
+            <div class="container">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Hasil Bobot Kriteria</h2>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped w-25" style="margin: auto;">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Kriteria
+                                    </th>
+                                    <th>
+                                        Bobot
+                                    </th>
+                                </tr>
+                            </thead>
+                            
+                            {% for bobot in  kfahp %}
+                            <tr>
+                                <td>
+                                    <b>
+                                        {{bobot.nama_kriteria}}
+                                    </b>
+                                </td>
+                                <td>
+                                    {{bobot.bobot_kriteria|floatformat:3}}
+                                </td> 
+                            </tr>
+                                
+                            {% endfor %}
+                                
+                        </table>
+                    </div>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+
+

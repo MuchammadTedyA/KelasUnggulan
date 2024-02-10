@@ -1,0 +1,228 @@
+{% extends 'bobotSub/form.html' %} {% block detail %}
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th></th>
+                {% for d1 in data %}
+                <th>
+                    <div class="text-center"><b>{{d1.nama_subkriteria}}</b></div>
+                </th>
+                {%endfor%}
+            </tr>
+        </thead>
+        <tbody>
+            {% for d1 in data %}
+            <tr>
+                <td>
+                    <div><b>{{d1.nama_subkriteria}}</b></div>
+                </td>
+                    {% for d2 in data %}
+                        
+                            {% for bobot in datab %}
+                                {%if bobot.subkriteria2 == d2.id_subkriteria and bobot.subkriteria1_id == d1.id_subkriteria %}
+                                    <td class="text-center">
+                                        {{bobot.bobot_normal}}
+                                    </td>
+                                {%endif%}
+                            {%endfor%}
+                        
+                    {%endfor%}
+                
+            </tr>
+            {%endfor%}
+            <tr>
+                <td>
+                    <b>Jumlah</b>
+                </td>
+                {%for jumlah in sum%}
+                <th class="text-center">
+                    {{jumlah.bobot_normal}}
+                </th>
+                {%endfor%}
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Tabel Normalisasi -->
+<div class="container">
+    <h2>Menghitung Normalisasi</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th></th>
+                {% for d1 in data %}
+                <th>
+                    <div class="text-center"><b>{{d1.nama_subkriteria}}</b></div>
+                </th>
+                {%endfor%}
+            </tr>
+        </thead>
+        <tbody>
+            {% for d1 in data %}
+            <tr>
+                <td>
+                    <div><b>{{d1.nama_subkriteria}}</b></div>
+                </td>
+                    {% for d2 in data %}
+                        
+                            {% for bobot in datab %}
+                                {%if bobot.subkriteria2 == d2.id_subkriteria and bobot.subkriteria1_id == d1.id_subkriteria %}
+                                    <td class="text-center">
+                                        {{bobot.normalisasi}}
+                                    </td>
+                                {%endif%}
+                            {%endfor%}
+                        
+                    {%endfor%}
+                
+            </tr>
+            {%endfor%}
+            <tr>
+                <td>
+                    <b>Jumlah</b>
+                </td>
+                {%for jum in sum2%}
+                <th class="text-center">
+                    {{jum.sum_normalisasi}}
+                </th>
+                {%endfor%}
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="container">
+    <h2 class="text-center">Rata-rata Hasil Normalisasi</h2>
+    <table class="table table-bordered w-50" style="margin: 0 auto;">
+        <tr class="row text-center">
+            <th class="col-5">Kriteria</th>
+            <th class="col">Rata-rata</th>
+        </tr>
+        {%for sum in dataz%}
+            <tr class="row">
+                <td class="col-5">
+                    <b>{{sum.subkriteria.nama_subkriteria}}</b>
+                </td>
+                <td class="col text-center">
+                    {{sum.bobot_ahp|floatformat:2}}
+                </td>
+            </tr>
+        {%endfor%}
+    </table>
+    
+</div>
+
+<!-- Tabel Kosistensi -->
+<div class="container">
+    <h2>Menghitung Kosistensi</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th></th>
+                {% for d1 in data %}
+                <th>
+                    <div class="text-center"><b>{{d1.nama_subkriteria}}</b></div>
+                </th>
+                {%endfor%}
+            </tr>
+        </thead>
+        <tbody>
+            {% for d1 in data %}
+            <tr>
+                <td>
+                    <div><b>{{d1.nama_subkriteria}}</b></div>
+                </td>
+                    {% for d2 in data %}
+                        
+                            {% for bobot in datab %}
+                                {%if bobot.subkriteria2 == d2.id_subkriteria and bobot.subkriteria1_id == d1.id_subkriteria %}
+                                    <td class="text-center">
+                                        {{bobot.nilai_konsistensi|floatformat:2}}
+                                    </td>
+                                {%endif%}
+                            {%endfor%}
+                        
+                    {%endfor%}
+                
+            </tr>
+            {%endfor%}
+            
+        </tbody>
+    </table>
+</div>
+
+<!-- Hasil hitung tabel kosistensi -->
+<div class="container">
+    <h2 class="text-center">Hasil Kosistensi</h2>
+    <table class="table table-bordered w-75" style="margin: 0 auto;">
+        <tr class="row text-center">
+            <th class="col-4">Kriteria</th>
+            <th class="col">Jumlah</th>
+            <th class="col">Dibagi Bobot</th>
+        </tr>
+        {%for sum in dataz%}
+            <tr class="row">
+                <td class="col-4 text-center">
+                    <b>{{sum.subkriteria.nama_subkriteria}}</b>
+                </td>
+                <td class="col text-center">
+                    {{sum.sum_kosistensi|floatformat:5}}
+                </td>
+                <td class="col text-center">
+                    {{sum.sum_kosistensi2|floatformat:5}}
+                </td>
+            </tr>
+        {%endfor%}
+            <tr class="row">
+                <td class="col-8 text-center" colspan="2">
+                    <b>Rata-rata</b>
+                </td>
+                <td class="col text-center">
+                    <b>{{avg.avg|floatformat:5}}</b>
+                </td>
+            </tr>
+            <tr class="row">
+                <td class="col-8 text-center" colspan="2">
+                    <b>CI</b>
+                </td>
+                <td class="col text-center">
+                    <b>{{ci|floatformat:5}}</b>
+                </td>
+            </tr>
+            <tr class="row">
+                <td class="col-8 text-center" colspan="2">
+                    <b>CR</b>
+                </td>
+                <td class="col text-center">
+                    <b>{{cr|floatformat:5}}</b>
+                </td>
+            </tr>
+    </table>
+
+    
+    {% if r == 1 %}
+    <div class="card m-5 text-center">
+        <div class="card-body">
+            <h4 style="color: green;">Kesimpulan : {{result}}</h4>
+            <a href="{% url 'fahp_subKriteriaFuzzy' krit.id_kriteria%}" class="btn btn-primary">Lanjut</a>
+        </div>
+        
+    </div>
+    {% else %}
+    <div class="card m-5 text-center">
+        <div class="card-body">
+            <h4 style="color: red;">Kesimpulan : {{result}}</h4>
+            <p style="color: red;">Tidak dapat melanjutkan ke proses berikutnya karena Consistensi Ratio lebih besar dari 0.10 (CR > 0.10)</p>
+            <a href="#" class="btn btn-secondary disabled" aria-disabled="true">Lanjut</a>
+        </div>
+        
+    </div>
+    {% endif %}
+        
+    
+</div>
+
+
+{% endblock detail %}

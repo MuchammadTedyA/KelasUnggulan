@@ -1,0 +1,195 @@
+{% extends 'base.html' %} {% block content %}
+
+<div
+  class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+>
+  <h1 class="h2">Masukan Siswa</h1>
+  {% comment %}
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group me-2">
+      <button type="button" class="btn btn-sm btn-outline-secondary">
+        Share
+      </button>
+      <button type="button" class="btn btn-sm btn-outline-secondary">
+        Export
+      </button>
+    </div>
+    <button
+      type="button"
+      class="btn btn-sm btn-outline-secondary dropdown-toggle"
+    >
+      <span data-feather="calendar" class="align-text-bottom"></span>
+      This week
+    </button>
+  </div>
+  {% endcomment %}
+</div>
+<div class="container">
+  <!-- {% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %} 
+  {% endif %} -->
+  {% if pesan %}
+  <div class="alert alert-danger">
+    {{pesan}}
+  </div>
+  {% endif %}
+  
+
+    
+    {% if siswaD %}
+      {% for i in siswaD %}
+      <form class="needs-validation" action="/siswa/update" method="POST">
+        {% csrf_token %}
+      
+        <div class="row m-2">
+          <div class="col">
+            <label for="inputEmail4" class="form-label">NISN</label>
+            <!-- {% if form.errors %}
+            {% if form}
+            {% endif %} -->
+            <input type="text" class="form-control" value="{{i.nisn_siswa}}" disabled/>
+            <input type="hidden" class="form-control" id="nisn_siswa" name="nisn_siswa" value="{{i.nisn_siswa}}"/>
+          </div>
+          
+        </div>
+
+        <div class="row m-2">
+          <div class="col">
+            <label for="inputEmail4" class="form-label">Nama Siswa</label>
+            <input type="text" class="form-control" id="nama_siswa" name="nama_siswa" value="{{i.nama_siswa}}" required/>
+          </div>
+          <div class="col-md-3">
+            <label for="inputPassword4" class="form-label">Tingkat IQ (Angka)</label>
+            <input type="text" class="form-control" id="iq_siswa" name="iq_siswa" value="{{i.iq_siswa}}" required/>
+          </div>
+        </div>
+        
+        <!-- <div class="col-md-6">
+          <label for="inputPassword4" class="form-label">Tingkat IQ (Huruf)</label>
+          <input type="text" class="form-control" id="iq_huruf_siswa" name="iq_huruf_siswa" required/>
+        </div> -->
+        
+        <div class="row m-2">
+          <div class="col-md-4">
+            <label for="inputPassword4" class="form-label">TPA IPA</label>
+            <input type="text" class="form-control" id="tpa_ipa_siswa" name="tpa_ipa_siswa" value="{{i.tpa_ipa_siswa}}" required/>
+          </div>
+          <div class="col-md-4">
+            <label for="inputEmail4" class="form-label">TPA IPS</label>
+            <input type="text" class="form-control" id="tpa_ips_siswa" name="tpa_ips_siswa" value="{{i.tpa_ips_siswa}}" required/>
+          </div>
+          <div class="col-md-4">
+            <label for="inputPassword4" class="form-label">TPA Bahasa</label>
+            <input type="text" class="form-control" id="tpa_bahasa_siswa" name="tpa_bahasa_siswa" value="{{i.tpa_bahasa_siswa}}" required/>
+          </div>
+        </div>
+
+        <div class="row m-2">
+          <div class="col-md-4">
+            <label for="inputPassword4" class="form-label">Nilai Rapor IPA</label>
+            <input type="text" class="form-control" id="rapor_ipa_siswa" name="rapor_ipa_siswa" value="{{i.rapor_ipa_siswa}}" required/>
+          </div>
+          <div class="col-md-4">
+            <label for="inputPassword4" class="form-label">Nilai Rapor IPS</label>
+            <input type="text" class="form-control" id="rapor_ips_siswa" name="rapor_ips_siswa" value="{{i.rapor_ipa_siswa}}" required/>
+          </div>
+          <div class="col-md-4">
+            <label for="inputEmail4" class="form-label">Nilai Rapor Bahasa</label>
+            <input type="text" class="form-control" id="rapor_bahasa_siswa" name="rapor_bahasa_siswa" value="{{i.rapor_bahasa_siswa}}" required/>
+          </div>
+        </div>
+
+        <div class="row m-2">
+          <div class="col text-center">
+            <input class="btn btn-secondary" type="button" onclick = "window.history.back()" value="kembali">
+            <input class="btn btn-primary" type="submit" value="Simpan">
+          </div>
+        </div>
+        
+        
+      </form>
+      {% endfor %}
+
+    {% else %}
+    <form class="needs-validation" action="/siswa/insert" method="POST">
+      {% csrf_token %}
+      <div class="row m-2">
+        <div>
+          <label for="inputEmail4" class="form-label">NISN</label>
+          <!-- {% if form.errors %}
+          {% if form}
+          {% endif %} -->
+          <input type="text" class="form-control" id="nisn_siswa" name="nisn_siswa" required/>
+        </div>
+        
+      </div>
+      
+
+      <div class="row m-2">
+        <div class="col">
+          <label for="inputEmail4" class="form-label">Nama Siswa</label>
+          <input type="text" class="form-control" id="nama_siswa" name="nama_siswa" required/>
+        </div>
+        <div class="col-md-3">
+          <label for="inputPassword4" class="form-label">Tingkat IQ (Angka)</label>
+          <input type="text" class="form-control" id="iq_siswa" name="iq_siswa" required/>
+        </div>
+      </div>
+      
+      <!-- <div class="col-md-6">
+        <label for="inputPassword4" class="form-label">Tingkat IQ (Huruf)</label>
+        <input type="text" class="form-control" id="iq_huruf_siswa" name="iq_huruf_siswa" required/>
+      </div> -->  
+
+      <div class="row m-2">
+        <div class="col-md-4">
+          <label for="inputPassword4" class="form-label">TPA IPA</label>
+          <input type="text" class="form-control" id="tpa_ipa_siswa" name="tpa_ipa_siswa" required/>
+        </div>
+        <div class="col-md-4">
+          <label for="inputEmail4" class="form-label">TPA IPS</label>
+          <input type="text" class="form-control" id="tpa_ips_siswa" name="tpa_ips_siswa" required/>
+        </div>
+        <div class="col-md-4">
+          <label for="inputPassword4" class="form-label">TPA Bahasa</label>
+          <input type="text" class="form-control" id="tpa_bahasa_siswa" name="tpa_bahasa_siswa" required/>
+        </div>
+      </div>
+
+      <div class="row m-2">
+        <div class="col-md-4">
+          <label for="inputPassword4" class="form-label">Nilai Rapor IPA</label>
+          <input type="text" class="form-control" id="rapor_ipa_siswa" name="rapor_ipa_siswa" required/>
+        </div>
+        <div class="col-md-4">
+          <label for="inputPassword4" class="form-label">Nilai Rapor IPS</label>
+          <input type="text" class="form-control" id="rapor_ips_siswa" name="rapor_ips_siswa" required/>
+        </div>
+        <div class="col-md-4">
+          <label for="inputEmail4" class="form-label">Nilai Rapor Bahasa</label>
+          <input type="text" class="form-control" id="rapor_bahasa_siswa" name="rapor_bahasa_siswa" required/>
+        </div>
+      </div>
+
+      <div class="row m-2">
+        <div class="col text-center">
+          <input class="btn btn-secondary" type="button" onclick = "window.history.back()" value="kembali">
+          <input class="btn btn-primary" type="submit" value="Simpan">
+        </div>
+      </div>
+      
+      
+    </form>
+    {% endif %}
+      
+    
+    
+</div>
+
+{% endblock content %}

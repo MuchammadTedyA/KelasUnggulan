@@ -1,0 +1,323 @@
+{% extends 'base.html' %} {% block content %}
+<script>
+	const myModal = document.getElementById('myModal')
+	const myInput = document.getElementById('myInput')
+
+	myModal.addEventListener('shown.bs.modal', () => {
+		myInput.focus()
+	})
+
+	var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+	var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+		return new bootstrap.Tooltip(tooltipTriggerEl)
+	})
+</script>
+
+<div class="container">
+  <div class="row">
+
+    <div class="col-md-6">
+      <div
+  class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+>
+        <h1 class="h2">Masukan Kriteria</h1>
+      </div>
+
+      <div class="container">
+        <form action="/kriteria" method="POST">
+          {% csrf_token %}
+          <div class="row g-2">
+
+            <div class="row g-2">
+              <label for="inputEmail4" class="form-label">Kode Kriteria</label>
+              <div class="col-md">
+                <input type="text" class="form-control" id="kodes" name="kodes" value="{{ kode }}" disabled/>
+				<input type="hidden" class="form-control" id="kode" name="kode" value="{{ kode }}"/>
+              </div>
+              <!-- <div class="col-md-3">
+                <button class="btn btn-secondary" type="button" id="generate" name="generate">Generate</button>
+              </div> -->
+            </div>
+            
+          
+			<div class="row g-2">
+				<div class="col-md">
+					<label for="inputEmail4" class="form-label">Nama Kriteria</label>
+					<input type="text" class="form-control" id="nama" name="nama" required/>
+				</div>
+			</div>
+            
+
+            <div class="col-md text-center">
+              <input class="btn btn-secondary" type="button" onclick = "window.history.back()" value="kembali">
+              <input class="btn btn-primary" type="submit" value="Simpan">
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+    
+    
+
+    <div class="col-md-6">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Tabel Kriteria</h1>
+      </div>
+      <table class="table table-striped">
+        <thead>
+			<tr>
+				<th class="text-center">Kode</th>
+				<th class="text-center">Nama Kriteria</th>
+				<th class="text-center">Aksi</th>
+			</tr>
+        </thead>
+
+        <tbody>
+			{% for data in kriteriaD %}
+			<tr>
+				<td class="col-md-2 text-center align-middle">{{data.id_kriteria}}</td>
+				<td class="col-md-6 text-center align-middle">{{data.nama_kriteria}}</td>
+				<td class="col-md">
+					<div class="text-center">
+						<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalUbah{{ data.id_kriteria }}" title="Ubah"><i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i></button>
+						<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalHapus{{ data.id_kriteria }}" title="Hapus"><i class="fa-solid fa-trash" style="color: #ffffff;"></i></button> 
+						<!-- <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#modalDetail{{ data.id_kriteria }}" title="Detail"><i class="fa-solid fa-eye"></i></button>  -->
+						<button class="btn btn-outline-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDetail{{ data.id_kriteria }}" aria-expanded="false" aria-controls="collapseExample" title="Detail">
+							<i class="fa-solid fa-eye"></i>
+						</button>
+						<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal{{ data.id_kriteria }}" 	title="Tambah Sub Kriteria">
+							<i class="fa-solid fa-plus" style="color: #ffffff;"></i>
+						</button>
+					</div>
+					
+
+					
+
+				</td>
+				<!-- Modal Tambah Sub -->
+				<div class="modal fade" id="modal{{ data.id_kriteria }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h1 class="modal-title fs-5" id="exampleModalLabel">Input Sub Kriteria</h1>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<form action="kriteria/sub" method="POST">
+								{% csrf_token %}
+								<div class="modal-body">
+										<div class="row">
+											<label class="form-label">Kriteria</label>
+											<div class="col-md">
+												<input type="text" class="form-control" value="{{data.nama_kriteria}}" disabled/>
+												<input type="hidden" class="form-control" id="kode" name="kode" value="{{ data.id_kriteria }}"/>
+											</div>
+										</div>
+										<div class="row">
+											<label for="inputEmail4" class="form-label">Kode Sub Kriteria</label>
+											<div class="col-md">
+												<input type="text" class="form-control" value="{{kodes}}" disabled/>
+												<input type="hidden" class="form-control" id="kodes" name="kodes" value="{{kodes}}"/>
+											</div>
+										</div>
+										<div class="row">
+											<label for="inputEmail4" class="form-label">Nama Sub Kriteria</label>
+											<div class="col-md">
+												<input type="text" class="form-control" id="nama" name="nama"/>
+											</div>
+										</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+									<input type="submit" name="submit" class="btn btn-primary" value="Simpan">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<!-- End Modal Tambah Sub -->
+
+				<!-- Modal Ubah Kriteria -->
+				<div class="modal fade" id="modalUbah{{ data.id_kriteria }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h1 class="modal-title fs-5" id="exampleModalLabel">Ubah Kriteria</h1>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<form action="{% url 'kriteria_ubah' data.id_kriteria%}" method="POST">
+								{% csrf_token %}
+								<div class="modal-body">
+										<div class="row">
+											<label for="inputEmail4" class="form-label">Kode Kriteria</label>
+											<div class="col-md">
+												<input type="text" class="form-control" value="{{data.id_kriteria}}" disabled/>
+												<input type="hidden" class="form-control" id="kodes" name="kodes" value="{{data.id_kriteria}}"/>
+											</div>
+										</div>
+										<div class="row">
+											<label for="inputEmail4" class="form-label">Nama Kriteria</label>
+											<div class="col-md">
+												<input type="text" class="form-control" id="nama" name="nama" value="{{data.nama_kriteria}}"/>
+											</div>
+										</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+									<input type="submit" name="submit" class="btn btn-primary" value="Simpan">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<!-- End Modal Ubah Kriteria -->
+
+				<!-- Modal Hapus Kriteria -->
+				<div class="modal fade" id="modalHapus{{ data.id_kriteria }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h1 class="modal-title fs-5" id="exampleModalLabel">Hapus Kriteria</h1>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+									<div class="row">
+										<label for="inputEmail4" class="form-label">Apakah Anda yakin menghapus kriteria <b>{{data.nama_kriteria}}</b>?</label>
+									</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+								<a href="{% url 'kriteria_hapus' data.id_kriteria%}" class="btn btn-success">Ya</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- End Modal Hapus Kriteria -->
+
+				<!-- Mo+dal Lihat Sub -->
+				<!-- <div class="modal fade" id="modalDetail{{ data.id_kriteria }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h1 class="modal-title fs-5" id="exampleModalLabel">Data Sub Kriteria (<b>{{data.nama_kriteria}}</b>)</h1>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+								<table class="table table-striped">
+									<thead>
+										<tr>
+											<th class="text-center">Kode</th>
+											<th class="text-center">Nama Kriteria</th>
+											<th class="text-center">Aksi</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for datas in subKriteriaD %}
+										<form action="{% url 'subKriteria_ubah' datas.id_subkriteria%}" method="POST">
+											{% csrf_token %}
+											<tr>
+												<td class="text-center align-middle">
+													{{datas.id_subkriteria}}
+													<input type="hidden" name="kode" id="kode" value="{{datas.id_subkriteria}}">
+												</td>
+												<td class="text-center align-middle">
+													<input class="form-control"  type="text" name="nama" id="nama" value="{{datas.nama_subkriteria}}">
+												</td>
+												<td class="text-center align-middle">
+													<input type="submit" name="submit" class="btn btn-primary" value="Simpan">
+													<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalHapusSub{{ data.id_kriteria }}" title="Hapus"><i class="fa-solid fa-trash" style="color: #ffffff;"></i></button> 
+												</td>
+											</tr>
+										</form>
+										
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+							</div>
+						</div>
+					</div>
+				</div> -->
+				<!-- End Modal lihat Sub -->
+				
+				
+
+				
+				
+			</tr>
+			
+			<tr>
+				<td colspan="3" class="hiddenRow">
+					<div class="collapse" id="collapseDetail{{ data.id_kriteria }}">
+						<div class="card card-body">
+							<table class="table table-striped">
+										<thead>
+											<tr>
+												<th class="text-center">Kode</th>
+												<th class="text-center">Nama Kriteria</th>
+												<th class="text-center">Aksi</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% for datas in subKriteriaD %}
+											
+												{% if datas.kriteria_id == data.id_kriteria %}
+												<form action="{% url 'subKriteria_ubah' datas.id_subkriteria%}" method="POST">
+													{% csrf_token %}
+													<tr>
+														<td class="text-center align-middle">
+															{{datas.id_subkriteria}}
+															<input type="hidden" name="kode" id="kode" value="{{datas.id_subkriteria}}">
+														</td>
+														<td class="text-center align-middle">
+															<input class="form-control"  type="text" name="nama" id="nama" value="{{datas.nama_subkriteria}}">
+														</td>
+														<td class="text-center align-middle">
+															<!-- <input type="submit" name="submit" class="btn btn-primary" value=""> -->
+															<button type="submit" class="btn btn-primary" title="Simpan"><i class="fa-solid fa-floppy-disk" style="color: #ffffff;"></i></button>
+															<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalHapusSub{{ datas.id_subkriteria }}" title="Hapus"><i class="fa-solid fa-trash" style="color: #ffffff;"></i></button> 
+														</td>
+													</tr>
+												</form>
+												
+												
+												<!-- Modal Hapus Sub Kriteria -->
+												<div class="modal fade" id="modalHapusSub{{ datas.id_subkriteria }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+													<div class="modal-dialog">
+														<div class="modal-content">
+															<div class="modal-header">
+																<h1 class="modal-title fs-5" id="exampleModalLabel">Hapus Sub Kriteria</h1>
+																<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+															</div>
+															<div class="modal-body">
+																	<div class="row">
+																		<label for="inputEmail4" class="form-label">Apakah Anda yakin menghapus sub kriteria <b>{{datas.nama_subkriteria}}</b>?</label>
+																	</div>
+															</div>
+															<div class="modal-footer">
+																<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+																<a href="{% url 'subKriteria_hapus' datas.id_subkriteria%}" class="btn btn-success">Ya</a>
+															</div>
+														</div>
+													</div>
+												</div>
+												<!-- End Modal Hapus Sub Kriteria -->
+
+												{%endif%}
+											{% endfor %}
+										</tbody>
+									</table>
+						</div>
+					</div>
+				</td>
+			</tr>
+			{% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

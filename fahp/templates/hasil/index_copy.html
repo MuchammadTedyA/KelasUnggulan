@@ -1,0 +1,133 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container m-3 p-3">
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center align-middle" rowspan="2">
+                            Nama Siswa
+                        </th>
+                        
+                        {% for i in kriteriaD %}
+                        <th colspan="3" class="text-center">
+                            {{i.nama_kriteria}}
+                        </th>
+                        {% endfor %}
+                        <th class="text-center align-middle" rowspan="2">
+                            Hasil
+                        </th>
+                            
+                        
+                    </tr>
+                    <tr>
+                        {% for i in kriteriaD %}
+                        <th class="text-center">
+                            Huruf
+                        </th>
+                        <th class="text-center">
+                            Bobot
+                        </th>
+                        <th class="text-center">
+                            x{{i.bobot_kriteria|floatformat:5}}
+                        </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    {% for i in siswaD %}
+                    <tr class="text-center">
+                        <td>
+                            {{i.nama_siswa}}
+                        </td>
+                        
+                        {% for j in hasilD %}
+                            
+                            {% if i.nisn_siswa == j.siswa_id %}
+                            <td>
+                                {{j.subkriteria.nama_subkriteria}}
+                            </td>
+                            <td>
+                                {{j.nilai_sub|floatformat:5}}
+                            </td>
+                            
+                            {% for k in kali %}
+                                
+                                {% if k.siswa_id == i.nisn_siswa and k.kriteria_id == j.kriteria_id %}
+                                    <td>
+                                        {{k.kali|floatformat:5}}
+                                    </td>
+                                {% endif %}
+                                    
+                            {% endfor %}
+                                
+                                
+                            {% endif %}
+                                
+                        {% endfor %}
+
+                        
+                        {% for l in sum %}
+                            
+                            {% if l.siswa_id == i.nisn_siswa %}
+                                <td style="color: green;">
+                                    <b>
+                                        {{l.sum|floatformat:5}}
+                                    </b>
+                                </td>
+                            {% endif %}
+                                
+                        {% endfor %}
+                            
+                            
+                    </tr>
+                        
+                    {% endfor %}
+                        
+                </tbody>
+            </table>
+            <div class="text-center">
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal" title="Simpan"><i class="fa-solid fa-save"></i> Simpan</button>
+            </div>
+            
+            <!-- Modal Tambah Sub -->
+				<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h1 class="modal-title fs-5" id="exampleModalLabel">Simpan Hasil</h1>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<form action="hasil/simpan" method="POST">
+								{% csrf_token %}
+								<div class="modal-body">
+										<div class="row">
+											<label class="form-label">ID Hasil</label>
+											<div class="col-md">
+												<input type="text" class="form-control" value="{{kodes}}" disabled/>
+												<input type="hidden" class="form-control" id="kode" name="kode" value="{{ kodes }}"/>
+											</div>
+										</div>
+										<div class="row">
+											<label for="inputEmail4" class="form-label">Nama</label>
+											<div class="col-md">
+												<input type="text" class="form-control" id="nama" name="nama"/>
+											</div>
+										</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+									<input type="submit" name="submit" class="btn btn-primary" value="Simpan">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			<!-- End Modal Tambah Sub -->
+        </div>
+    </div>
+</div>
+
+{%endblock content %}

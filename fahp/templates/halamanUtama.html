@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    
+<div class="container" style="margin-top: 20px;">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header">
+                    Jumlah Laporan Tersimpan
+                </div>
+                <div class="card-body">
+                    <div class="text-center"><h1>{{count}}</h1></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="card">
+                <div class="card-header">
+                    Laporan Hasil
+                </div>
+                <div class="card-body">
+                    <table class="table table-responsive">
+                        <thead class="text-center">
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Kode</th>
+                                <th>Nama</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            
+                            {% for data in page_obj %}
+                            <tr>
+                                <td class="text-center"> {{data.tanggal|date:'Y-m-d'}} </td>
+                                <td class="text-center">{{data.id}}</td>
+                                <td>{{data.nama}}</td>
+                                <td class="text-center">
+                                    <a href="{% url 'tampil_laporan' data.id%}" class="btn btn-outline-dark" title="Detail"><i class="fa-solid fa-eye"></i></a>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalHapus{{ data.id }}" title="Hapus"><i class="fa-solid fa-trash" style="color: #ffffff;"></i></button> 
+                                </td>
+                            </tr>
+                            <!-- Modal Hapus Laporan -->
+                            <div class="modal fade" id="modalHapus{{ data.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Hapus Data Siswa</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                        <label for="inputEmail4" class="form-label">Apakah Anda yakin menghapus laporan <b>{{data.id}}</b>?</label>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+                                    <a href="{% url 'hapus_laporan' data.id%}" class="btn btn-success">Ya</a>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <!-- End Modal Hapus Laporan -->
+                            {% empty %}
+                            <tr>
+                                <td class="text-center" style="color: red;" colspan="4">Belum Ada Laporan Tersimpan</td>
+                            </tr>
+        
+                            
+                            {% endfor %}
+                            
+                            
+                                
+                            
+                        </tbody>
+                    </table>
+                    {% if page_obj.has_other_pages %}
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item"><a class="page-link" href="?page=1">first</a></li>
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">first</span></li>
+                            <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+                        {% endif %}
+                        {% for i in page_obj.paginator.page_range %}
+                            {% if page_obj.number == i %}
+                            <li class="page-item active"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+                            {% elif i > page_obj.number|add:'-5' and i < page_obj.number|add:'5' %}
+                            <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">last</a></li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                            <li class="page-item disabled"><span class="page-link">last</span></li>
+                        {% endif %}
+                        </ul>
+                    </nav>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+</div>
+
+
+{% endblock content %}
